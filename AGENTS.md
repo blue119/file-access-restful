@@ -28,7 +28,7 @@ This repository hosts the File Access RESTful service. Follow these conventions 
 - Every PR should link its tracking ticket, list validation steps (commands, sample responses), and include screenshots or curl transcripts for user-visible changes. Request review from a second agent for updates under `src/storage/` or deployment automation.
 
 ## Upload API Usage
-- On startup the service logs two credentials: a 16-character general upload token and a 32-character super token (`INFO file_access.upload - ...`). Tokens rotate per process; override with `FILE_ACCESS_UPLOAD_TOKEN` and `FILE_ACCESS_SUPER_TOKEN` (values are trimmed/padded to the expected length) when you need deterministic deployments.
+- On startup the service logs two credentials: a 16-character general upload token and a 32-character super token (`INFO file_access.upload - ...`). Tokens rotate per process; override with `FILE_ACCESS_SUPER_TOKEN` (values are trimmed/padded to the expected length) when you need deterministic deployments.
 - Standard uploads: `curl -T README.md http://localhost:PORT/upload/<token>/docs/README.md`. After each successful use, the general token is regenerated, logged, and reflected in subsequent listings; be ready to distribute the new value to trusted clients.
 - Super uploads may substitute the super token in the same slot for emergency access. Requests missing a valid token segment receive `401`. Nested paths continue to create directories automatically.
 

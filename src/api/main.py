@@ -51,7 +51,7 @@ def _normalize_token(raw: str | None, length: int) -> str:
     return (trimmed + padding)[:length]
 
 
-UPLOAD_TOKEN = _normalize_token(os.environ.get(UPLOAD_TOKEN_ENV), TOKEN_LENGTH)
+UPLOAD_TOKEN = _normalize_token("", TOKEN_LENGTH)
 SUPER_TOKEN = _normalize_token(os.environ.get(SUPER_TOKEN_ENV), SUPER_TOKEN_LENGTH)
 
 _upload_token_lock = Lock()
@@ -76,8 +76,8 @@ if not logger.handlers:
     handler.setFormatter(logging.Formatter("%(levelname)s %(name)s - %(message)s"))
     logger.addHandler(handler)
 
-logger.info("Upload token initialised. Include it in path: /upload/%s/<file>", _get_upload_token())
-logger.info("Super token initialised. Admin override path: /upload/%s/<file>", SUPER_TOKEN)
+logger.info("Upload token initialised. Include it in path: /upload/%s/ -T", _get_upload_token())
+logger.info("Super token initialised. Admin override path: /upload/%s/ -T", SUPER_TOKEN)
 
 app = FastAPI(
     title="File Access Service",
@@ -196,7 +196,7 @@ def _rotate_upload_token() -> str:
     current = _get_upload_token()
     new_token = _generate_token(TOKEN_LENGTH, exclude=current)
     _set_upload_token(new_token)
-    logger.info("Upload token rotated after use. Include it in path: /upload/%s/<file>", new_token)
+    logger.info("Upload token rotated after use. Include it in path: /upload/%s/ -T", new_token)
     return new_token
 
 
